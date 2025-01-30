@@ -24,3 +24,5 @@ function CryptoCard({ totalValue, change24h }) {
     </div>
   );
 }
+
+export { CryptoCard };
