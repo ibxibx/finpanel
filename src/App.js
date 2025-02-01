@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { DashboardCard } from "./components/DashboardCard";
 import { CryptoCard } from "./components/CryptoCard";
 import { SavingsCard } from "./components/SavingsCard";
 
 function App() {
-  const financialData = {
+  // Main financial data state
+  const [financialData, setFinancialData] = useState({
     accountBalance: {
       current: 10000,
       previous: 8800,
@@ -48,13 +49,80 @@ function App() {
         { date: "2025-01-01", amount: 500 },
       ],
     },
+  });
+
+  // State for refresh/loading status
+  const [isRefreshing, setIsRefreshing] = useState(false);
+  // State for last update timestamp
+  const [lastUpdateTime, setLastUpdateTime] = useState(
+    new Date().toLocaleString()
+  );
+
+  // Function to simulate data refresh
+  const refreshData = async () => {
+    setIsRefreshing(true);
+
+    try {
+      // Simulate API call delay
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+
+      // Simulate random data updates
+      setFinancialData((prevData) => ({
+        ...prevData,
+        accountBalance: {
+          ...prevData.accountBalance,
+          current: Math.round(
+            prevData.accountBalance.current *
+              (1 + (Math.random() * 0.02 - 0.01))
+          ),
+          lastUpdated: new Date().toLocaleString(),
+        },
+        crypto: {
+          ...prevData.crypto,
+          totalValue: Math.round(
+            prevData.crypto.totalValue * (1 + (Math.random() * 0.04 - 0.02))
+          ),
+          change24h: Number(
+            (prevData.crypto.change24h + (Math.random() * 2 - 1)).toFixed(2)
+          ),
+          lastUpdated: new Date().toLocaleString(),
+        },
+      }));
+
+      setLastUpdateTime(new Date().toLocaleString());
+    } catch (error) {
+      console.error("Error refreshing data:", error);
+    } finally {
+      setIsRefreshing(false);
+    }
   };
+
+  // Refresh data every 30 seconds
+  useEffect(() => {
+    const interval = setInterval(refreshData, 30000);
+    return () => clearInterval(interval);
+  }, []);
 
   return (
     <div className="min-h-screen bg-gray-100">
       <header className="bg-blue-600 p-4 text-white">
-        <h1 className="text-2xl font-bold">FinPanel Dashboard</h1>
-        <p className="text-sm">Your Personal Finance Tracker</p>
+        <div className="flex justify-between items-center">
+          <div>
+            <h1 className="text-2xl font-bold">FinPanel Dashboard</h1>
+            <p className="text-sm">Your Personal Finance Tracker</p>
+          </div>
+          <div className="flex items-center gap-4">
+            <span className="text-xs">Last updated: {lastUpdateTime}</span>
+            <button
+              onClick={refreshData}
+              disabled={isRefreshing}
+              className={`px-4 py-2 rounded bg-blue-500 hover:bg-blue-400 transition-colors
+                ${isRefreshing ? "opacity-50 cursor-not-allowed" : ""}`}
+            >
+              {isRefreshing ? "Refreshing..." : "Refresh"}
+            </button>
+          </div>
+        </div>
       </header>
 
       <main className="p-4">
@@ -104,7 +172,6 @@ function App() {
           />
         </div>
 
-        {/* Placeholder Sections */}
         <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="bg-white p-4 rounded-lg shadow">
             <h2 className="text-lg font-semibold mb-4">Recent Transactions</h2>
