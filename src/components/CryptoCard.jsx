@@ -3,11 +3,15 @@ import React from "react";
 function CryptoCard({
   totalValue,
   change24h,
-  holdings = [], // Array of crypto holdings
-  dominantCoin = null, // Most valuable holding
+  holdings = [],
+  dominantCoin = null,
   lastUpdated = null,
-  marketTrend = null, // 'bull' | 'bear' | null
+  marketTrend = null,
 }) {
+  // Conditional render checks
+  const hasHoldings = holdings && holdings.length > 0;
+  const showMarketTrend = marketTrend !== null;
+
   return (
     <div className="mb-4 bg-gradient-to-r from-purple-600 to-blue-600 p-4 rounded-lg shadow text-white">
       <div className="flex justify-between items-start">
@@ -38,7 +42,7 @@ function CryptoCard({
             {change24h >= 0 ? "+" : ""}
             {change24h}%
           </p>
-          {marketTrend && (
+          {showMarketTrend && (
             <p className="text-xs opacity-75">
               Market: {marketTrend === "bull" ? "🟢 Bullish" : "🔴 Bearish"}
             </p>
@@ -46,7 +50,7 @@ function CryptoCard({
         </div>
       </div>
 
-      {holdings.length > 0 && (
+      {hasHoldings && (
         <div className="mt-3 pt-3 border-t border-white border-opacity-20">
           <p className="text-sm mb-2">Top Holdings:</p>
           <div className="grid grid-cols-2 gap-2">
@@ -56,6 +60,12 @@ function CryptoCard({
               </div>
             ))}
           </div>
+        </div>
+      )}
+
+      {!hasHoldings && (
+        <div className="mt-3 pt-3 border-t border-white border-opacity-20">
+          <p className="text-sm text-center">No holdings to display</p>
         </div>
       )}
     </div>
