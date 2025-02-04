@@ -3,6 +3,7 @@ import { DashboardCard } from "./components/DashboardCard";
 import { CryptoCard } from "./components/CryptoCard";
 import { SavingsCard } from "./components/SavingsCard";
 import LoadingOverlay from "./components/LoadingOverlay";
+import { TransactionsCard } from "./components/TransactionsCard";
 
 function App() {
   // Main financial data state
@@ -290,14 +291,7 @@ function App() {
             </div>
 
             <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="bg-white p-4 rounded-lg shadow">
-                <h2 className="text-lg font-semibold mb-4">
-                  Recent Transactions
-                </h2>
-                <p className="text-gray-500">
-                  Transaction history will be displayed here
-                </p>
-              </div>
+              <TransactionsCard transactions={financialData.transactions} />
 
               <div className="bg-white p-4 rounded-lg shadow">
                 <h2 className="text-lg font-semibold mb-4">Budget Overview</h2>
