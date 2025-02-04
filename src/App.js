@@ -50,6 +50,48 @@ function App() {
         { date: "2025-01-01", amount: 500 },
       ],
     },
+    transactions: [
+      {
+        id: "tx1",
+        date: "2025-01-31 14:30",
+        description: "Salary Deposit",
+        amount: 6000.0,
+        type: "income",
+        category: "Salary",
+      },
+      {
+        id: "tx2",
+        date: "2025-01-31 12:15",
+        description: "Grocery Shopping",
+        amount: 150.75,
+        type: "expense",
+        category: "Groceries",
+      },
+      {
+        id: "tx3",
+        date: "2025-01-31 10:00",
+        description: "Bitcoin Purchase",
+        amount: 500.0,
+        type: "investment",
+        category: "Crypto",
+      },
+      {
+        id: "tx4",
+        date: "2025-01-30 15:45",
+        description: "Rent Payment",
+        amount: 2000.0,
+        type: "expense",
+        category: "Housing",
+      },
+      {
+        id: "tx5",
+        date: "2025-01-30 09:30",
+        description: "Freelance Payment",
+        amount: 800.0,
+        type: "income",
+        category: "Freelance",
+      },
+    ],
   });
 
   // State for refresh/loading status
