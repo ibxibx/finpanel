@@ -4,6 +4,7 @@ import { CryptoCard } from "./components/CryptoCard";
 import { SavingsCard } from "./components/SavingsCard";
 import LoadingOverlay from "./components/LoadingOverlay";
 import { TransactionsCard } from "./components/TransactionsCard";
+import { AddTransactionForm } from "./components/AddTransactionForm";
 
 function App() {
   // Main financial data state
@@ -95,6 +96,9 @@ function App() {
     ],
   });
 
+  // State for showing/hiding transaction form
+  const [showTransactionForm, setShowTransactionForm] = useState(false);
+
   // State for refresh/loading status
   const [isRefreshing, setIsRefreshing] = useState(false);
   // State for error handling
@@ -111,6 +115,55 @@ function App() {
   const [lastUpdateTime, setLastUpdateTime] = useState(
     new Date().toLocaleString()
   );
+
+  // Handler for adding new transactions
+  const handleAddTransaction = (newTransaction) => {
+    setFinancialData((prevData) => {
+      // Add new transaction to the list
+      const updatedTransactions = [newTransaction, ...prevData.transactions];
+
+      // Update relevant financial data based on transaction type
+      let updates = { transactions: updatedTransactions };
+
+      const amount = newTransaction.amount;
+
+      // Update account balance
+      if (newTransaction.type === "expense") {
+        updates.accountBalance = {
+          ...prevData.accountBalance,
+          current: prevData.accountBalance.current - amount,
+        };
+      } else if (newTransaction.type === "income") {
+        updates.accountBalance = {
+          ...prevData.accountBalance,
+          current: prevData.accountBalance.current + amount,
+        };
+      }
+
+      // Update monthly income/expenses if the transaction is from current month
+      const currentMonth = new Date().getMonth();
+      const transactionMonth = new Date(newTransaction.date).getMonth();
+
+      if (currentMonth === transactionMonth) {
+        if (newTransaction.type === "income") {
+          updates.monthlyIncome = {
+            ...prevData.monthlyIncome,
+            current: prevData.monthlyIncome.current + amount,
+          };
+        } else if (newTransaction.type === "expense") {
+          updates.monthlyExpenses = {
+            ...prevData.monthlyExpenses,
+            current: prevData.monthlyExpenses.current + amount,
+          };
+        }
+      }
+
+      return {
+        ...prevData,
+        ...updates,
+      };
+    });
+  };
 
   // Function to simulate data refresh
   const refreshData = async () => {
@@ -291,7 +344,18 @@ function App() {
             </div>
 
             <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-4">
-              <TransactionsCard transactions={financialData.transactions} />
+              <div>
+                <div className="flex justify-between items-center mb-4">
+                  <h2 className="text-lg font-semibold">Recent Transactions</h2>
+                  <button
+                    onClick={() => setShowTransactionForm(true)}
+                    className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+                  >
+                    Add Transaction
+                  </button>
+                </div>
+                <TransactionsCard transactions={financialData.transactions} />
+              </div>
 
               <div className="bg-white p-4 rounded-lg shadow">
                 <h2 className="text-lg font-semibold mb-4">Budget Overview</h2>
@@ -300,6 +364,17 @@ function App() {
                 </p>
               </div>
             </div>
+
+            {showTransactionForm && (
+              <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+                <div className="max-w-md w-full">
+                  <AddTransactionForm
+                    onAddTransaction={handleAddTransaction}
+                    onClose={() => setShowTransactionForm(false)}
+                  />
+                </div>
+              </div>
+            )}
           </>
         )}
       </main>
