@@ -5,6 +5,7 @@ import { SavingsCard } from "./components/SavingsCard";
 import LoadingOverlay from "./components/LoadingOverlay";
 import { TransactionsCard } from "./components/TransactionsCard";
 import { AddTransactionForm } from "./components/AddTransactionForm";
+import { LoadingProvider, useLoading } from "./components/LoadingContext";
 
 function App() {
   // Main financial data state
