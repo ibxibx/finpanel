@@ -5,9 +5,9 @@ import { SavingsCard } from "./components/SavingsCard";
 import LoadingOverlay from "./components/LoadingOverlay";
 import { TransactionsCard } from "./components/TransactionsCard";
 import { AddTransactionForm } from "./components/AddTransactionForm";
-import { LoadingProvider, useLoading } from "./components/LoadingContext";
+import { LoadingProvider, useLoading } from "./contexts/LoadingContext";
 
-function App() {
+function AppContent() {
   // Main financial data state
   const [financialData, setFinancialData] = useState({
     accountBalance: {
@@ -97,38 +97,22 @@ function App() {
     ],
   });
 
-  // State for showing/hiding transaction form
   const [showTransactionForm, setShowTransactionForm] = useState(false);
-
-  // State for refresh/loading status
   const [isRefreshing, setIsRefreshing] = useState(false);
-  // State for error handling
   const [error, setError] = useState(null);
-  // State for individual section loading states
-  const [loadingStates, setLoadingStates] = useState({
-    crypto: false,
-    balance: false,
-    income: false,
-    expenses: false,
-    savings: false,
-  });
-  // State for last update timestamp
   const [lastUpdateTime, setLastUpdateTime] = useState(
     new Date().toLocaleString()
   );
 
-  // Handler for adding new transactions
+  // Get loading context
+  const { loadingStates, setAllLoading } = useLoading();
+
   const handleAddTransaction = (newTransaction) => {
     setFinancialData((prevData) => {
-      // Add new transaction to the list
       const updatedTransactions = [newTransaction, ...prevData.transactions];
-
-      // Update relevant financial data based on transaction type
       let updates = { transactions: updatedTransactions };
-
       const amount = newTransaction.amount;
 
-      // Update account balance
       if (newTransaction.type === "expense") {
         updates.accountBalance = {
           ...prevData.accountBalance,
@@ -141,7 +125,6 @@ function App() {
         };
       }
 
-      // Update monthly income/expenses if the transaction is from current month
       const currentMonth = new Date().getMonth();
       const transactionMonth = new Date(newTransaction.date).getMonth();
 
@@ -166,24 +149,14 @@ function App() {
     });
   };
 
-  // Function to simulate data refresh
   const refreshData = async () => {
     setIsRefreshing(true);
     setError(null);
-    // Set all sections to loading
-    setLoadingStates({
-      crypto: true,
-      balance: true,
-      income: true,
-      expenses: true,
-      savings: true,
-    });
+    setAllLoading(true);
 
     try {
-      // Simulate API call delay
       await new Promise((resolve) => setTimeout(resolve, 1000));
 
-      // Simulate random data updates
       setFinancialData((prevData) => ({
         ...prevData,
         accountBalance: {
@@ -212,24 +185,15 @@ function App() {
       console.error("Error refreshing data:", error);
     } finally {
       setIsRefreshing(false);
-      // Reset all loading states
-      setLoadingStates({
-        crypto: false,
-        balance: false,
-        income: false,
-        expenses: false,
-        savings: false,
-      });
+      setAllLoading(false);
     }
   };
 
-  // Refresh data every 30 seconds
   useEffect(() => {
     const interval = setInterval(refreshData, 30000);
     return () => clearInterval(interval);
   }, []);
 
-  // Check if data is available
   const hasData = Object.keys(financialData).length > 0;
 
   return (
@@ -380,6 +344,14 @@ function App() {
         )}
       </main>
     </div>
+  );
+}
+
+function App() {
+  return (
+    <LoadingProvider>
+      <AppContent />
+    </LoadingProvider>
   );
 }
 
