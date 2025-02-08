@@ -6,6 +6,7 @@ import LoadingOverlay from "./components/LoadingOverlay";
 import { TransactionsCard } from "./components/TransactionsCard";
 import { AddTransactionForm } from "./components/AddTransactionForm";
 import { LoadingProvider, useLoading } from "./contexts/LoadingContext";
+import { SessionTimer } from "./components/SessionTimer";
 
 function AppContent() {
   // Main financial data state
@@ -202,7 +203,9 @@ function AppContent() {
         <div className="flex justify-between items-center">
           <div>
             <h1 className="text-2xl font-bold">FinPanel Dashboard</h1>
+            <div className="flex items-center gap-2"></div>
             <p className="text-sm">Your Personal Finance Tracker</p>
+            <SessionTimer />
           </div>
           <div className="flex items-center gap-4">
             <span className="text-xs">Last updated: {lastUpdateTime}</span>
