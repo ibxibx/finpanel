@@ -7,6 +7,7 @@ import { TransactionsCard } from "./components/TransactionsCard";
 import { AddTransactionForm } from "./components/AddTransactionForm";
 import { LoadingProvider, useLoading } from "./contexts/LoadingContext";
 import { SessionTimer } from "./components/SessionTimer";
+import MetricGroup from "./components/MetricGroup";
 
 function AppContent() {
   // Main financial data state
@@ -309,6 +310,10 @@ function AppContent() {
                   recentSavings={financialData.savings.recentSavings}
                 />
               </div>
+            </div>
+
+            <div className="mt-4">
+              <MetricGroup />
             </div>
 
             <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-4">
