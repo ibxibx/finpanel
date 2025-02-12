@@ -199,22 +199,28 @@ function AppContent() {
   const hasData = Object.keys(financialData).length > 0;
 
   return (
-    <div className="min-h-screen bg-gray-100">
-      <header className="bg-blue-600 p-4 text-white">
+    <div className="min-h-screen bg-white">
+      <header className="bg-[#1d1d1f] p-6 text-white backdrop-blur-lg bg-opacity-95 sticky top-0 z-50">
         <div className="flex justify-between items-center">
           <div>
-            <h1 className="text-2xl font-bold">FinPanel Dashboard</h1>
+            <h1 className="text-3xl font-medium tracking-tight">
+              FinPanel Dashboard
+            </h1>
             <div className="flex items-center gap-2"></div>
-            <p className="text-sm">Your Personal Finance Tracker</p>
+            <p className="text-sm text-gray-300 mt-1">
+              Your Personal Finance Tracker
+            </p>
             <SessionTimer />
           </div>
+
           <div className="flex items-center gap-4">
             <span className="text-xs">Last updated: {lastUpdateTime}</span>
             <button
               onClick={refreshData}
               disabled={isRefreshing}
-              className={`px-4 py-2 rounded bg-blue-500 hover:bg-blue-400 transition-colors
-                ${isRefreshing ? "opacity-50 cursor-not-allowed" : ""}`}
+              className={`px-4 py-2 rounded-lg bg-white bg-opacity-10 text-white hover:bg-opacity-20 
+              transition-all duration-200 text-sm font-medium
+              ${isRefreshing ? "opacity-50 cursor-not-allowed" : ""}`}
             >
               {isRefreshing ? "Refreshing..." : "Refresh"}
             </button>
@@ -222,9 +228,9 @@ function AppContent() {
         </div>
       </header>
 
-      <main className="p-4">
+      <main className="p-6 max-w-7xl mx-auto">
         {error && (
-          <div className="mb-4 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative">
+          <div className="mb-6 bg-red-50 border border-red-100 text-red-600 px-6 py-4 rounded-xl relative">
             <span className="block sm:inline">{error}</span>
           </div>
         )}
@@ -249,7 +255,7 @@ function AppContent() {
               />
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="relative">
                 {loadingStates.balance && (
                   <LoadingOverlay message="Updating balance..." />
@@ -322,7 +328,8 @@ function AppContent() {
                   <h2 className="text-lg font-semibold">Recent Transactions</h2>
                   <button
                     onClick={() => setShowTransactionForm(true)}
-                    className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+                    className="px-4 py-2 bg-[#1d1d1f] text-white rounded-lg hover:bg-[#2d2d2f] 
+                   transition-all duration-200 text-sm font-medium"
                   >
                     Add Transaction
                   </button>
@@ -339,7 +346,10 @@ function AppContent() {
             </div>
 
             {showTransactionForm && (
-              <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+              <div
+                className="fixed inset-0 bg-black bg-opacity-40 backdrop-blur-sm 
+  flex items-center justify-center p-6 z-50"
+              >
                 <div className="max-w-md w-full">
                   <AddTransactionForm
                     onAddTransaction={handleAddTransaction}
