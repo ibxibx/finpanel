@@ -37,8 +37,11 @@
     ]
   },
   "devDependencies": {
+    "autoprefixer": "^10.4.20",
     "eslint": "^8.0.0",
     "eslint-config-react-app": "^7.0.1",
-    "eslint-plugin-react": "^7.32.2"
+    "eslint-plugin-react": "^7.32.2",
+    "postcss": "^8.5.2",
+    "tailwindcss": "^4.0.6"
   }
 }
