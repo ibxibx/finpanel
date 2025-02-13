@@ -2,20 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
-    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
-    monospace;
-}
-
 :root {
   --primary-bg: #ffffff;
   --secondary-bg: #f5f5f7;
@@ -27,27 +13,25 @@ code {
   --transition-speed: 0.2s;
 }
 
-body {
-  margin: 0;
-  font-family: "Object Sans", -apple-system, BlinkMacSystemFont, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  background-color: var(--primary-bg);
-  color: var(--text-primary);
+@layer base {
+  body {
+    @apply m-0 bg-[var(--primary-bg)] text-[var(--text-primary)];
+    font-family: 'Object Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
 }
 
-.card {
-  @apply bg-white rounded-xl shadow-sm border border-gray-100 transition-all duration-200;
-}
+@layer components {
+  .card {
+    @apply bg-white rounded-xl shadow-sm border border-gray-100 transition-all duration-200;
+  }
 
-.card:hover {
-  @apply shadow-md;
-}
+  .card:hover {
+    @apply shadow-md;
+  }
 
-button {
-  @apply transition-all duration-200;
-}
-
-.input-field {
-  @apply w-full px-4 py-2 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200;
+  .input-field {
+    @apply w-full px-4 py-2 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200;
+  }
 }
