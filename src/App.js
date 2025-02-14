@@ -4,6 +4,7 @@ import { LoadingProvider } from "./contexts/LoadingContext";
 import Dashboard from "./pages/Dashboard";
 import TransactionHistory from "./pages/TransactionHistory";
 import Settings from "./pages/Settings";
+import { SessionTimer } from "./components/SessionTimer";
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
                 <p className="text-sm text-gray-300 mt-1">
                   Your Personal Finance Tracker
                 </p>
+                <SessionTimer />
               </div>
 
               <nav className="flex gap-4">
