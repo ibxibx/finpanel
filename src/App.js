@@ -4,7 +4,7 @@ import { LoadingProvider } from "./contexts/LoadingContext";
 import Dashboard from "./pages/Dashboard";
 import TransactionHistory from "./pages/TransactionHistory";
 import Settings from "./pages/Settings";
-import { SessionTimer } from "./components/SessionTimer";
+import SessionTimer from "./components/SessionTimer";
 
 function App() {
   return (
