@@ -31,8 +31,29 @@ function TransactionsCard({ transactions = [] }) {
     })}`;
   };
 
+  // Event handlers for demonstrating propagation
+  const handleCardClick = (e) => {
+    console.log("Transactions Card Clicked");
+  };
+
+  const handleGroupClick = (e, date) => {
+    console.log("Transaction Group Clicked:", date);
+    // The event will bubble up to handleCardClick
+  };
+
+  const handleTransactionClick = (e, transaction) => {
+    console.log("Transaction Clicked:", transaction.description);
+    // The event will bubble up to both handleGroupClick and handleCardClick
+  };
+
+  const handleActionClick = (e, transaction) => {
+    // Stop event from bubbling up to parent handlers
+    e.stopPropagation();
+    console.log("Action Clicked for:", transaction.description);
+  };
+
   return (
-    <div className="bg-white p-4 rounded-lg shadow">
+    <div className="bg-white p-4 rounded-lg shadow" onClick={handleCardClick}>
       <h2 className="text-lg font-semibold mb-4">Recent Transactions</h2>
 
       {transactions.length === 0 ? (
@@ -43,7 +64,11 @@ function TransactionsCard({ transactions = [] }) {
         <div className="space-y-4">
           {Object.entries(groupedTransactions).map(
             ([date, dayTransactions]) => (
-              <div key={date} className="space-y-2">
+              <div
+                key={date}
+                className="space-y-2"
+                onClick={(e) => handleGroupClick(e, date)}
+              >
                 <h3 className="text-sm font-medium text-gray-500 sticky top-0 bg-white">
                   {new Date(date).toLocaleDateString("en-US", {
                     weekday: "long",
@@ -57,7 +82,8 @@ function TransactionsCard({ transactions = [] }) {
                   {dayTransactions.map((transaction) => (
                     <div
                       key={transaction.id}
-                      className="flex items-center justify-between py-2 hover:bg-gray-50 px-2 rounded-lg transition-colors"
+                      className="flex items-center justify-between py-2 hover:bg-gray-50 px-2 rounded-lg transition-colors cursor-pointer"
+                      onClick={(e) => handleTransactionClick(e, transaction)}
                     >
                       <div className="flex items-center space-x-3">
                         <div
@@ -88,17 +114,25 @@ function TransactionsCard({ transactions = [] }) {
                           </p>
                         </div>
                       </div>
-                      <div className="text-right">
-                        <p
-                          className={`text-sm font-medium ${getTypeStyle(
-                            transaction.type
-                          )}`}
+                      <div className="flex items-center gap-2">
+                        <div className="text-right">
+                          <p
+                            className={`text-sm font-medium ${getTypeStyle(
+                              transaction.type
+                            )}`}
+                          >
+                            {formatAmount(transaction.amount, transaction.type)}
+                          </p>
+                          <p className="text-xs text-gray-500">
+                            {transaction.date.split(" ")[1]}
+                          </p>
+                        </div>
+                        <button
+                          onClick={(e) => handleActionClick(e, transaction)}
+                          className="ml-2 p-1 hover:bg-gray-200 rounded-full transition-colors"
                         >
-                          {formatAmount(transaction.amount, transaction.type)}
-                        </p>
-                        <p className="text-xs text-gray-500">
-                          {transaction.date.split(" ")[1]}
-                        </p>
+                          ⋮
+                        </button>
                       </div>
                     </div>
                   ))}
