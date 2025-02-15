@@ -1,44 +1,71 @@
 import React from "react";
 
-const TransactionItem = ({ transaction, onSelect, onDelete }) => {
+const TransactionItem = ({
+  transaction,
+  onSelect,
+  getTypeStyle,
+  formatAmount,
+}) => {
   const handleClick = (e) => {
-    // This will run first
-    console.log("Transaction Item Clicked");
+    console.log("Transaction Item Clicked:", transaction.description);
     onSelect(transaction);
   };
 
-  const handleDeleteClick = (e) => {
-    // Stop the event from bubbling up to parent elements
+  const handleActionClick = (e) => {
+    // Stop propagation so the parent click handler doesn't fire
     e.stopPropagation();
-    console.log("Delete Button Clicked");
-    onDelete(transaction.id);
+    console.log("Action Button Clicked for:", transaction.description);
   };
 
   return (
     <div
       onClick={handleClick}
-      className="p-4 bg-white rounded-lg shadow hover:shadow-md transition-all duration-200 cursor-pointer"
+      className="flex items-center justify-between py-2 hover:bg-gray-50 px-2 rounded-lg transition-colors cursor-pointer"
     >
-      <div className="flex justify-between items-center">
+      <div className="flex items-center space-x-3">
+        <div
+          className={`w-8 h-8 rounded-full flex items-center justify-center ${
+            transaction.type === "expense"
+              ? "bg-red-100"
+              : transaction.type === "income"
+              ? "bg-green-100"
+              : transaction.type === "transfer"
+              ? "bg-blue-100"
+              : "bg-purple-100"
+          }`}
+        >
+          {transaction.type === "expense"
+            ? "↓"
+            : transaction.type === "income"
+            ? "↑"
+            : transaction.type === "transfer"
+            ? "↔"
+            : "★"}
+        </div>
         <div>
-          <h3 className="font-medium">{transaction.description}</h3>
-          <p className="text-sm text-gray-500">{transaction.date}</p>
+          <p className="text-sm font-medium text-gray-900">
+            {transaction.description}
+          </p>
+          <p className="text-xs text-gray-500">{transaction.category}</p>
         </div>
-        <div className="flex items-center gap-4">
-          <span
-            className={`font-medium ${
-              transaction.type === "expense" ? "text-red-600" : "text-green-600"
-            }`}
+      </div>
+      <div className="flex items-center gap-2">
+        <div className="text-right">
+          <p
+            className={`text-sm font-medium ${getTypeStyle(transaction.type)}`}
           >
-            ${transaction.amount.toFixed(2)}
-          </span>
-          <button
-            onClick={handleDeleteClick}
-            className="px-2 py-1 bg-red-50 text-red-600 rounded hover:bg-red-100 text-sm"
-          >
-            Delete
-          </button>
+            {formatAmount(transaction.amount, transaction.type)}
+          </p>
+          <p className="text-xs text-gray-500">
+            {transaction.date.split(" ")[1]}
+          </p>
         </div>
+        <button
+          onClick={handleActionClick}
+          className="ml-2 p-1 hover:bg-gray-200 rounded-full transition-colors"
+        >
+          ⋮
+        </button>
       </div>
     </div>
   );
