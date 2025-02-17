@@ -59,3 +59,5 @@ function App() {
     </LoadingProvider>
   );
 }
+
+export default App;
