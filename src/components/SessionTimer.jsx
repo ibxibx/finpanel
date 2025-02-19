@@ -8,7 +8,7 @@ function SessionTimer() {
   // Use ref to store the interval ID
   const timerIntervalRef = useRef(null);
 
-  // Equivalent to componentDidMount and componentWillUnmount
+  // This effect handles the timer starting and stopping
   useEffect(() => {
     startTimer();
 
@@ -18,18 +18,32 @@ function SessionTimer() {
     };
   }, []); // Empty dependency array means this runs once on mount
 
+  // This effect handles pause state changes
+  useEffect(() => {
+    if (isPaused) {
+      stopTimer();
+    } else {
+      startTimer();
+    }
+  }, [isPaused]); // Run when isPaused changes
+
   // Timer functions
   const startTimer = () => {
-    timerIntervalRef.current = setInterval(() => {
-      if (!isPaused) {
+    // Clear any existing interval first to prevent multiple intervals
+    stopTimer();
+
+    // Only start a new interval if not paused
+    if (!isPaused) {
+      timerIntervalRef.current = setInterval(() => {
         setSessionTime((prevTime) => prevTime + 1);
-      }
-    }, 1000);
+      }, 1000);
+    }
   };
 
   const stopTimer = () => {
     if (timerIntervalRef.current) {
       clearInterval(timerIntervalRef.current);
+      timerIntervalRef.current = null;
     }
   };
 
