@@ -1,7 +1,53 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 
 function TransactionsCard({ transactions = [] }) {
-  // Function to get appropriate style for transaction type
+  // Add state for grouped transactions
+  const [groupedTransactions, setGroupedTransactions] = useState({});
+  // Add state for last update time
+  const [lastUpdate, setLastUpdate] = useState(new Date());
+  // Add state for window width to handle responsive design
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+
+  // Effect 1: Group transactions whenever transactions prop changes
+  useEffect(() => {
+    const grouped = transactions.reduce((groups, transaction) => {
+      const date = transaction.date.split(" ")[0];
+      if (!groups[date]) {
+        groups[date] = [];
+      }
+      groups[date].push(transaction);
+      return groups;
+    }, {});
+    setGroupedTransactions(grouped);
+    setLastUpdate(new Date());
+  }, [transactions]); // Only re-run when transactions change
+
+  // Effect 2: Window resize listener
+  useEffect(() => {
+    function handleResize() {
+      setWindowWidth(window.innerWidth);
+    }
+
+    window.addEventListener("resize", handleResize);
+
+    // Cleanup function to remove event listener
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []); // Empty dependency array means this runs once on mount
+
+  // Effect 3: Auto-refresh timestamp every minute
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setLastUpdate(new Date());
+    }, 60000);
+
+    // Cleanup function to clear interval
+    return () => {
+      clearInterval(timer);
+    };
+  }, []); // Empty dependency array means this runs once on mount
+
   const getTypeStyle = (type) => {
     const styles = {
       income: "text-green-600",
@@ -12,17 +58,6 @@ function TransactionsCard({ transactions = [] }) {
     return styles[type] || "text-gray-600";
   };
 
-  // Group transactions by date
-  const groupedTransactions = transactions.reduce((groups, transaction) => {
-    const date = transaction.date.split(" ")[0]; // Get just the date part
-    if (!groups[date]) {
-      groups[date] = [];
-    }
-    groups[date].push(transaction);
-    return groups;
-  }, {});
-
-  // Format currency
   const formatAmount = (amount, type) => {
     const prefix = type === "expense" ? "-" : "+";
     return `${prefix}$${Math.abs(amount).toLocaleString("en-US", {
@@ -31,30 +66,14 @@ function TransactionsCard({ transactions = [] }) {
     })}`;
   };
 
-  // Event handlers for demonstrating propagation
-  const handleCardClick = (e) => {
-    console.log("Transactions Card Clicked");
-  };
-
-  const handleGroupClick = (e, date) => {
-    console.log("Transaction Group Clicked:", date);
-    // The event will bubble up to handleCardClick
-  };
-
-  const handleTransactionClick = (e, transaction) => {
-    console.log("Transaction Clicked:", transaction.description);
-    // The event will bubble up to both handleGroupClick and handleCardClick
-  };
-
-  const handleActionClick = (e, transaction) => {
-    // Stop event from bubbling up to parent handlers
-    e.stopPropagation();
-    console.log("Action Clicked for:", transaction.description);
-  };
-
   return (
-    <div className="bg-white p-4 rounded-lg shadow" onClick={handleCardClick}>
-      <h2 className="text-lg font-semibold mb-4">Recent Transactions</h2>
+    <div className="bg-white p-4 rounded-lg shadow">
+      <div className="flex justify-between items-center mb-4">
+        <h2 className="text-lg font-semibold">Recent Transactions</h2>
+        <span className="text-xs text-gray-500">
+          Last updated: {lastUpdate.toLocaleTimeString()}
+        </span>
+      </div>
 
       {transactions.length === 0 ? (
         <p className="text-gray-500 text-center py-4">
@@ -64,16 +83,12 @@ function TransactionsCard({ transactions = [] }) {
         <div className="space-y-4">
           {Object.entries(groupedTransactions).map(
             ([date, dayTransactions]) => (
-              <div
-                key={date}
-                className="space-y-2"
-                onClick={(e) => handleGroupClick(e, date)}
-              >
+              <div key={date} className="space-y-2">
                 <h3 className="text-sm font-medium text-gray-500 sticky top-0 bg-white">
                   {new Date(date).toLocaleDateString("en-US", {
-                    weekday: "long",
+                    weekday: windowWidth > 768 ? "long" : "short",
                     year: "numeric",
-                    month: "long",
+                    month: windowWidth > 768 ? "long" : "short",
                     day: "numeric",
                   })}
                 </h3>
@@ -82,8 +97,7 @@ function TransactionsCard({ transactions = [] }) {
                   {dayTransactions.map((transaction) => (
                     <div
                       key={transaction.id}
-                      className="flex items-center justify-between py-2 hover:bg-gray-50 px-2 rounded-lg transition-colors cursor-pointer"
-                      onClick={(e) => handleTransactionClick(e, transaction)}
+                      className="flex items-center justify-between py-2 hover:bg-gray-50 px-2 rounded-lg transition-colors"
                     >
                       <div className="flex items-center space-x-3">
                         <div
@@ -114,25 +128,17 @@ function TransactionsCard({ transactions = [] }) {
                           </p>
                         </div>
                       </div>
-                      <div className="flex items-center gap-2">
-                        <div className="text-right">
-                          <p
-                            className={`text-sm font-medium ${getTypeStyle(
-                              transaction.type
-                            )}`}
-                          >
-                            {formatAmount(transaction.amount, transaction.type)}
-                          </p>
-                          <p className="text-xs text-gray-500">
-                            {transaction.date.split(" ")[1]}
-                          </p>
-                        </div>
-                        <button
-                          onClick={(e) => handleActionClick(e, transaction)}
-                          className="ml-2 p-1 hover:bg-gray-200 rounded-full transition-colors"
+                      <div className="text-right">
+                        <p
+                          className={`text-sm font-medium ${getTypeStyle(
+                            transaction.type
+                          )}`}
                         >
-                          ⋮
-                        </button>
+                          {formatAmount(transaction.amount, transaction.type)}
+                        </p>
+                        <p className="text-xs text-gray-500">
+                          {transaction.date.split(" ")[1]}
+                        </p>
                       </div>
                     </div>
                   ))}
