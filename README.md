@@ -1,6 +1,6 @@
 # FinPanel - Personal Finance Dashboard
 
-A comprehensive personal finance dashboard built with React.js as part of the #100DaysOfCode challenge. This project combines modern web development practices with practical financial management tools.
+A comprehensive personal finance dashboard built with React.js as part of the #80DaysOfCode challenge. This project combines modern web development practices with practical financial management tools.
 
 ## 🚀 Project Overview
 
@@ -15,18 +15,20 @@ FinPanel is a dynamic financial dashboard that helps users track their income, e
 - 📱 Responsive design for all devices
 - ⚡ Real-time data updates
 - 🔄 Transaction management system
+- 💾 Local storage for transaction persistence
+- ⏱️ Session time tracking
 
 ## 🛠️ Tech Stack
 
 - React.js
 - Context API for state management
 - Tailwind CSS for styling
-- Real-time data updates
+- Local Storage for data persistence
 - Component-based architecture
 
 ## 🚀 Development Progress
 
-This project is being developed as part of the #100DaysOfCode challenge, implementing new features and best practices daily. Currently implementing React fundamentals and advanced features:
+This project is being developed as part of the #80DaysOfCode challenge, implementing new features and best practices daily. Current progress:
 
 - ✅ Basic React App Setup
 - ✅ JSX Implementation
@@ -36,11 +38,24 @@ This project is being developed as part of the #100DaysOfCode challenge, impleme
 - ✅ Event Handling
 - ✅ Conditional Rendering
 - ✅ Lists and Keys
-- ✅ Forms
+- ✅ Forms and Validation
 - ✅ Component Lifecycle
 - ✅ React Fragments
-- 🔄 Styling in React (In Progress)
+- ✅ Context API Implementation
+- ✅ Event Propagation
+- ✅ React Hooks (useState)
+- ✅ React Hooks (useEffect)
+- ✅ Local Storage Integration
+- 🔄 Advanced Component Patterns (In Progress)
 - 📅 Future implementations planned through Day 80
+
+### Recent Implementations (Days 15-18):
+- Implemented form validation in AddTransactionForm
+- Added event propagation handling in TransactionsCard
+- Converted class components to functional components with useState
+- Implemented useEffect for side effects management
+- Added transaction persistence using localStorage
+- Enhanced session timing functionality
 
 ## 🔧 Getting Started
 
@@ -93,4 +108,4 @@ This project is open source and available under the [MIT License](LICENSE).
 
 ---
 
-*This project is currently in active development as part of the #100DaysOfCode challenge.*
+*This project is currently in active development as part of the #80DaysOfCode challenge. Currently at Day 18 of 80.*
