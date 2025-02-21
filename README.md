@@ -107,5 +107,3 @@ While this is primarily a learning project, suggestions and feedback are welcome
 This project is open source and available under the [MIT License](LICENSE).
 
 ---
-
-*This project is currently in active development as part of the #80DaysOfCode challenge. Currently at Day 18 of 80.*
