@@ -1,16 +1,22 @@
 import React from "react";
 import { useLoading } from "../contexts/LoadingContext";
 import LoadingOverlay from "./LoadingOverlay";
+import { useCrypto } from "../contexts/CryptoContext";
 
-function CryptoCard({
-  totalValue,
-  change24h,
-  holdings,
-  dominantCoin,
-  lastUpdated,
-  marketTrend,
-}) {
+function CryptoCard() {
   const { loadingStates } = useLoading();
+  const { cryptoData } = useCrypto();
+
+  // Destructure cryptoData
+  const {
+    totalValue,
+    change24h,
+    holdings,
+    dominantCoin,
+    lastUpdated,
+    marketTrend,
+  } = cryptoData;
+
   // Conditional render checks
   const hasHoldings = holdings && holdings.length > 0;
   const showMarketTrend = marketTrend !== null;
