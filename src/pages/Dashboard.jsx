@@ -216,14 +216,7 @@ const Dashboard = () => {
             {loadingStates.crypto && (
               <LoadingOverlay message="Updating crypto data..." />
             )}
-            <CryptoCard
-              totalValue={financialData.crypto.totalValue}
-              change24h={financialData.crypto.change24h}
-              lastUpdated={financialData.crypto.lastUpdated}
-              holdings={financialData.crypto.holdings}
-              dominantCoin={financialData.crypto.dominantCoin}
-              marketTrend={financialData.crypto.marketTrend}
-            />
+            <CryptoCard />
           </div>
 
           <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6">
