@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { DashboardCard } from "../components/DashboardCard";
 import { CryptoCard } from "../components/CryptoCard";
 import { SavingsCard } from "../components/SavingsCard";
 import LoadingOverlay from "../components/LoadingOverlay";
@@ -8,6 +7,24 @@ import { AddTransactionForm } from "../components/AddTransactionForm";
 import { useLoading } from "../contexts/LoadingContext";
 import { SessionTimer } from "../components/SessionTimer";
 import MetricGroup from "../components/MetricGroup";
+import RefreshableDashboardCard from "../components/RefreshableDashboardCard";
+import withDataRefresh from "../hoc/withDataRefresh";
+
+// Create enhanced components using our HOC
+const BalanceCard = withDataRefresh(RefreshableDashboardCard, {
+  dataType: "balance",
+  refreshInterval: 60000, // 1 minute
+});
+
+const IncomeCard = withDataRefresh(RefreshableDashboardCard, {
+  dataType: "income",
+  refreshInterval: 90000, // 1.5 minutes
+});
+
+const ExpenseCard = withDataRefresh(RefreshableDashboardCard, {
+  dataType: "expenses",
+  refreshInterval: 90000, // 1.5 minutes
+});
 
 const Dashboard = () => {
   // Main financial data state
@@ -108,6 +125,43 @@ const Dashboard = () => {
 
   // Get loading context
   const { loadingStates, setAllLoading } = useLoading();
+
+  // Handlers for data refresh
+  const handleBalanceRefresh = (updatedData) => {
+    setFinancialData((prevData) => ({
+      ...prevData,
+      accountBalance: {
+        ...prevData.accountBalance,
+        current: updatedData.current,
+        percentageChange: updatedData.percentageChange,
+        lastUpdated: new Date().toLocaleString(),
+      },
+    }));
+  };
+
+  const handleIncomeRefresh = (updatedData) => {
+    setFinancialData((prevData) => ({
+      ...prevData,
+      monthlyIncome: {
+        ...prevData.monthlyIncome,
+        current: updatedData.current,
+        percentageChange: updatedData.percentageChange,
+        lastUpdated: new Date().toLocaleString(),
+      },
+    }));
+  };
+
+  const handleExpensesRefresh = (updatedData) => {
+    setFinancialData((prevData) => ({
+      ...prevData,
+      monthlyExpenses: {
+        ...prevData.monthlyExpenses,
+        current: updatedData.current,
+        percentageChange: updatedData.percentageChange,
+        lastUpdated: new Date().toLocaleString(),
+      },
+    }));
+  };
 
   const handleAddTransaction = (newTransaction) => {
     setFinancialData((prevData) => {
@@ -220,48 +274,41 @@ const Dashboard = () => {
           </div>
 
           <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="relative">
-              {loadingStates.balance && (
-                <LoadingOverlay message="Updating balance..." />
-              )}
-              <DashboardCard
-                title="Current Balance"
-                value={financialData.accountBalance.current}
-                previousValue={financialData.accountBalance.previous}
-                percentageChange={financialData.accountBalance.percentageChange}
-                lastUpdated={financialData.accountBalance.lastUpdated}
-              />
-            </div>
+            {/* Balance Card with Auto-Refresh */}
+            <BalanceCard
+              title="Current Balance"
+              data={{
+                current: financialData.accountBalance.current,
+                previous: financialData.accountBalance.previous,
+                percentageChange: financialData.accountBalance.percentageChange,
+              }}
+              onDataRefresh={handleBalanceRefresh}
+            />
 
-            <div className="relative">
-              {loadingStates.income && (
-                <LoadingOverlay message="Updating income..." />
-              )}
-              <DashboardCard
-                title="Monthly Income"
-                value={financialData.monthlyIncome.current}
-                previousValue={financialData.monthlyIncome.previous}
-                percentageChange={financialData.monthlyIncome.percentageChange}
-                valueColor="green-600"
-                lastUpdated={financialData.monthlyIncome.lastUpdated}
-              />
-            </div>
+            {/* Income Card with Auto-Refresh */}
+            <IncomeCard
+              title="Monthly Income"
+              data={{
+                current: financialData.monthlyIncome.current,
+                previous: financialData.monthlyIncome.previous,
+                percentageChange: financialData.monthlyIncome.percentageChange,
+              }}
+              valueColor="green-600"
+              onDataRefresh={handleIncomeRefresh}
+            />
 
-            <div className="relative">
-              {loadingStates.expenses && (
-                <LoadingOverlay message="Updating expenses..." />
-              )}
-              <DashboardCard
-                title="Monthly Expenses"
-                value={financialData.monthlyExpenses.current}
-                previousValue={financialData.monthlyExpenses.previous}
-                percentageChange={
-                  financialData.monthlyExpenses.percentageChange
-                }
-                valueColor="red-600"
-                lastUpdated={financialData.monthlyExpenses.lastUpdated}
-              />
-            </div>
+            {/* Expenses Card with Auto-Refresh */}
+            <ExpenseCard
+              title="Monthly Expenses"
+              data={{
+                current: financialData.monthlyExpenses.current,
+                previous: financialData.monthlyExpenses.previous,
+                percentageChange:
+                  financialData.monthlyExpenses.percentageChange,
+              }}
+              valueColor="red-600"
+              onDataRefresh={handleExpensesRefresh}
+            />
 
             <div className="relative">
               {loadingStates.savings && (
