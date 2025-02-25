@@ -5,10 +5,10 @@ import LoadingOverlay from "../components/LoadingOverlay";
 import { TransactionsCard } from "../components/TransactionsCard";
 import { AddTransactionForm } from "../components/AddTransactionForm";
 import { useLoading } from "../contexts/LoadingContext";
-import { SessionTimer } from "../components/SessionTimer";
 import MetricGroup from "../components/MetricGroup";
 import RefreshableDashboardCard from "../components/RefreshableDashboardCard";
 import withDataRefresh from "../hoc/withDataRefresh";
+import ErrorBoundary from "../components/ErrorBoundary";
 
 // Create enhanced components using our HOC
 const BalanceCard = withDataRefresh(RefreshableDashboardCard, {
@@ -252,6 +252,22 @@ const Dashboard = () => {
 
   const hasData = Object.keys(financialData).length > 0;
 
+  // Custom fallback UI for financial components
+  const financialComponentFallback = (error, errorInfo) => (
+    <div className="bg-white p-6 rounded-2xl border border-red-100 shadow-sm">
+      <h2 className="text-red-600 text-sm font-medium tracking-wide">
+        Component Error
+      </h2>
+      <p className="mt-2 text-gray-600">
+        We couldn't load this component. The data may be temporarily
+        unavailable.
+      </p>
+      <p className="mt-2 text-xs text-gray-500">
+        Try refreshing the page or come back later.
+      </p>
+    </div>
+  );
+
   return (
     <main className="p-6 max-w-7xl mx-auto">
       {error && (
@@ -266,102 +282,128 @@ const Dashboard = () => {
         </div>
       ) : (
         <>
-          <div className="relative">
-            {loadingStates.crypto && (
-              <LoadingOverlay message="Updating crypto data..." />
-            )}
-            <CryptoCard />
-          </div>
+          {/* Crypto Card with Error Boundary */}
+          <ErrorBoundary fallback={financialComponentFallback}>
+            <div className="relative">
+              {loadingStates.crypto && (
+                <LoadingOverlay message="Updating crypto data..." />
+              )}
+              <CryptoCard />
+            </div>
+          </ErrorBoundary>
 
           <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6">
-            {/* Balance Card with Auto-Refresh */}
-            <BalanceCard
-              title="Current Balance"
-              data={{
-                current: financialData.accountBalance.current,
-                previous: financialData.accountBalance.previous,
-                percentageChange: financialData.accountBalance.percentageChange,
-              }}
-              onDataRefresh={handleBalanceRefresh}
-            />
-
-            {/* Income Card with Auto-Refresh */}
-            <IncomeCard
-              title="Monthly Income"
-              data={{
-                current: financialData.monthlyIncome.current,
-                previous: financialData.monthlyIncome.previous,
-                percentageChange: financialData.monthlyIncome.percentageChange,
-              }}
-              valueColor="green-600"
-              onDataRefresh={handleIncomeRefresh}
-            />
-
-            {/* Expenses Card with Auto-Refresh */}
-            <ExpenseCard
-              title="Monthly Expenses"
-              data={{
-                current: financialData.monthlyExpenses.current,
-                previous: financialData.monthlyExpenses.previous,
-                percentageChange:
-                  financialData.monthlyExpenses.percentageChange,
-              }}
-              valueColor="red-600"
-              onDataRefresh={handleExpensesRefresh}
-            />
-
-            <div className="relative">
-              {loadingStates.savings && (
-                <LoadingOverlay message="Updating savings..." />
-              )}
-              <SavingsCard
-                current={financialData.savings.current}
-                goal={financialData.savings.goal}
-                monthlyTarget={financialData.savings.monthlyTarget}
-                targetDate={financialData.savings.targetDate}
-                projectedDate={financialData.savings.projectedDate}
-                recentSavings={financialData.savings.recentSavings}
+            {/* Balance Card with Auto-Refresh & Error Boundary */}
+            <ErrorBoundary fallback={financialComponentFallback}>
+              <BalanceCard
+                title="Current Balance"
+                data={{
+                  current: financialData.accountBalance.current,
+                  previous: financialData.accountBalance.previous,
+                  percentageChange:
+                    financialData.accountBalance.percentageChange,
+                }}
+                onDataRefresh={handleBalanceRefresh}
               />
-            </div>
+            </ErrorBoundary>
+
+            {/* Income Card with Auto-Refresh & Error Boundary */}
+            <ErrorBoundary fallback={financialComponentFallback}>
+              <IncomeCard
+                title="Monthly Income"
+                data={{
+                  current: financialData.monthlyIncome.current,
+                  previous: financialData.monthlyIncome.previous,
+                  percentageChange:
+                    financialData.monthlyIncome.percentageChange,
+                }}
+                valueColor="green-600"
+                onDataRefresh={handleIncomeRefresh}
+              />
+            </ErrorBoundary>
+
+            {/* Expenses Card with Auto-Refresh & Error Boundary */}
+            <ErrorBoundary fallback={financialComponentFallback}>
+              <ExpenseCard
+                title="Monthly Expenses"
+                data={{
+                  current: financialData.monthlyExpenses.current,
+                  previous: financialData.monthlyExpenses.previous,
+                  percentageChange:
+                    financialData.monthlyExpenses.percentageChange,
+                }}
+                valueColor="red-600"
+                onDataRefresh={handleExpensesRefresh}
+              />
+            </ErrorBoundary>
+
+            {/* Savings Card with Error Boundary */}
+            <ErrorBoundary fallback={financialComponentFallback}>
+              <div className="relative">
+                {loadingStates.savings && (
+                  <LoadingOverlay message="Updating savings..." />
+                )}
+                <SavingsCard
+                  current={financialData.savings.current}
+                  goal={financialData.savings.goal}
+                  monthlyTarget={financialData.savings.monthlyTarget}
+                  targetDate={financialData.savings.targetDate}
+                  projectedDate={financialData.savings.projectedDate}
+                  recentSavings={financialData.savings.recentSavings}
+                />
+              </div>
+            </ErrorBoundary>
           </div>
 
-          <div className="mt-4">
-            <MetricGroup />
-          </div>
+          {/* Metrics Group with Error Boundary */}
+          <ErrorBoundary>
+            <div className="mt-4">
+              <MetricGroup />
+            </div>
+          </ErrorBoundary>
 
           <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <div className="flex justify-between items-center mb-4">
-                <h2 className="text-lg font-semibold">Recent Transactions</h2>
-                <button
-                  onClick={() => setShowTransactionForm(true)}
-                  className="px-4 py-2 bg-[#1d1d1f] text-white rounded-lg hover:bg-[#2d2d2f] 
-                   transition-all duration-200 text-sm font-medium"
-                >
-                  Add Transaction
-                </button>
+            {/* Transactions with Error Boundary */}
+            <ErrorBoundary>
+              <div>
+                <div className="flex justify-between items-center mb-4">
+                  <h2 className="text-lg font-semibold">Recent Transactions</h2>
+                  <button
+                    onClick={() => setShowTransactionForm(true)}
+                    className="px-4 py-2 bg-[#1d1d1f] text-white rounded-lg hover:bg-[#2d2d2f] 
+                     transition-all duration-200 text-sm font-medium"
+                  >
+                    Add Transaction
+                  </button>
+                </div>
+                <TransactionsCard transactions={financialData.transactions} />
               </div>
-              <TransactionsCard transactions={financialData.transactions} />
-            </div>
+            </ErrorBoundary>
 
-            <div className="bg-white p-4 rounded-lg shadow">
-              <h2 className="text-lg font-semibold mb-4">Budget Overview</h2>
-              <p className="text-gray-500">
-                Budget breakdown will be displayed here
-              </p>
-            </div>
+            {/* Budget Overview with Error Boundary */}
+            <ErrorBoundary>
+              <div className="bg-white p-4 rounded-lg shadow">
+                <h2 className="text-lg font-semibold mb-4">Budget Overview</h2>
+                <p className="text-gray-500">
+                  Budget breakdown will be displayed here
+                </p>
+              </div>
+            </ErrorBoundary>
           </div>
 
+          {/* Transaction Form Modal */}
           {showTransactionForm && (
             <div
               className="fixed inset-0 bg-black bg-opacity-40 backdrop-blur-sm 
               flex items-center justify-center p-6 z-50"
             >
               <div className="max-w-md w-full">
-                <AddTransactionForm
-                  onAddTransaction={handleAddTransaction}
-                  onClose={() => setShowTransactionForm(false)}
-                />
+                <ErrorBoundary>
+                  <AddTransactionForm
+                    onAddTransaction={handleAddTransaction}
+                    onClose={() => setShowTransactionForm(false)}
+                  />
+                </ErrorBoundary>
               </div>
             </div>
           )}
