@@ -9,6 +9,7 @@ import MetricGroup from "../components/MetricGroup";
 import RefreshableDashboardCard from "../components/RefreshableDashboardCard";
 import withDataRefresh from "../hoc/withDataRefresh";
 import ErrorBoundary from "../components/ErrorBoundary";
+import Portal from "../components/Portal";
 
 // Create enhanced components using our HOC
 const BalanceCard = withDataRefresh(RefreshableDashboardCard, {
@@ -393,19 +394,26 @@ const Dashboard = () => {
 
           {/* Transaction Form Modal */}
           {showTransactionForm && (
-            <div
-              className="fixed inset-0 bg-black bg-opacity-40 backdrop-blur-sm 
-              flex items-center justify-center p-6 z-50"
-            >
-              <div className="max-w-md w-full">
-                <ErrorBoundary>
-                  <AddTransactionForm
-                    onAddTransaction={handleAddTransaction}
-                    onClose={() => setShowTransactionForm(false)}
-                  />
-                </ErrorBoundary>
+            <Portal>
+              <div
+                className="fixed inset-0 bg-black bg-opacity-40 backdrop-blur-sm flex items-center justify-center p-6 z-50"
+                onClick={(e) => {
+                  // Close when clicking backdrop (not the form)
+                  if (e.target === e.currentTarget) {
+                    setShowTransactionForm(false);
+                  }
+                }}
+              >
+                <div className="max-w-md w-full">
+                  <ErrorBoundary>
+                    <AddTransactionForm
+                      onAddTransaction={handleAddTransaction}
+                      onClose={() => setShowTransactionForm(false)}
+                    />
+                  </ErrorBoundary>
+                </div>
               </div>
-            </div>
+            </Portal>
           )}
         </>
       )}
