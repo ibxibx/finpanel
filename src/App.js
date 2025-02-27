@@ -9,6 +9,7 @@ import Settings from "./pages/Settings";
 import ErrorBoundaryDemo from "./pages/ErrorBoundaryDemo";
 import SessionTimer from "./components/SessionTimer";
 import ErrorBoundary from "./components/ErrorBoundary";
+import PerformanceDemo from "./pages/PerformanceDemo";
 
 function App() {
   return (
@@ -44,6 +45,12 @@ function App() {
                         Transactions
                       </Link>
                       <Link
+                        to="/performance-demo"
+                        className="px-4 py-2 rounded-lg hover:bg-white hover:bg-opacity-10 transition-all duration-200"
+                      >
+                        Performance
+                      </Link>
+                      <Link
                         to="/error-demo"
                         className="px-4 py-2 rounded-lg hover:bg-white hover:bg-opacity-10 transition-all duration-200"
                       >
@@ -60,7 +67,7 @@ function App() {
                 </header>
 
                 <Routes>
-                  {/* Wrap individual routes in error boundaries for more granular control */}
+                  {/* Individual routes wrapped in error boundaries for more granular control */}
                   <Route
                     path="/"
                     element={
@@ -83,6 +90,14 @@ function App() {
                     element={
                       <ErrorBoundary>
                         <Settings />
+                      </ErrorBoundary>
+                    }
+                  />
+                  <Route
+                    path="/performance-demo"
+                    element={
+                      <ErrorBoundary>
+                        <PerformanceDemo />
                       </ErrorBoundary>
                     }
                   />
