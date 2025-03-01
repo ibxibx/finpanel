@@ -51,12 +51,6 @@ function App() {
                         Performance
                       </Link>
                       <Link
-                        to="/error-demo"
-                        className="px-4 py-2 rounded-lg hover:bg-white hover:bg-opacity-10 transition-all duration-200"
-                      >
-                        Error Demo
-                      </Link>
-                      <Link
                         to="/settings"
                         className="px-4 py-2 rounded-lg hover:bg-white hover:bg-opacity-10 transition-all duration-200"
                       >
