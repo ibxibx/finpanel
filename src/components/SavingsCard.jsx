@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 
 function SavingsCard({
   current,
@@ -84,5 +85,28 @@ function SavingsCard({
     </div>
   );
 }
+
+// Define PropTypes for the component
+SavingsCard.propTypes = {
+  current: PropTypes.number.isRequired,
+  goal: PropTypes.number.isRequired,
+  monthlyTarget: PropTypes.number,
+  targetDate: PropTypes.string,
+  recentSavings: PropTypes.arrayOf(
+    PropTypes.shape({
+      date: PropTypes.string.isRequired,
+      amount: PropTypes.number.isRequired,
+    })
+  ),
+  projectedDate: PropTypes.string,
+};
+
+// Define defaultProps
+SavingsCard.defaultProps = {
+  monthlyTarget: null,
+  targetDate: null,
+  recentSavings: [],
+  projectedDate: null,
+};
 
 export { SavingsCard };

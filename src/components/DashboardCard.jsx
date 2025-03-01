@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 
 function DashboardCard({
   title,
@@ -96,5 +97,26 @@ function DashboardCard({
     </div>
   );
 }
+
+// Define PropTypes for the component
+DashboardCard.propTypes = {
+  title: PropTypes.string.isRequired,
+  value: PropTypes.number,
+  valueColor: PropTypes.string,
+  previousValue: PropTypes.number,
+  percentageChange: PropTypes.number,
+  lastUpdated: PropTypes.string,
+  subtitle: PropTypes.string,
+  children: PropTypes.node,
+};
+
+// Define defaultProps
+DashboardCard.defaultProps = {
+  valueColor: "gray-900",
+  previousValue: null,
+  percentageChange: null,
+  lastUpdated: null,
+  subtitle: null,
+};
 
 export { DashboardCard };

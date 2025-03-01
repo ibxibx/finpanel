@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 import { useLoading } from "../contexts/LoadingContext";
 import LoadingOverlay from "./LoadingOverlay";
 import { useCrypto } from "../contexts/CryptoContext";
@@ -85,5 +86,31 @@ function CryptoCard() {
     </div>
   );
 }
+
+// Define PropTypes for useCrypto context data
+CryptoCard.propTypes = {
+  // This component uses context, so we don't need to specify props directly,
+  // but we can document the expected shape of the cryptoData from context
+};
+
+// Define PropTypes for the cryptoData shape from useCrypto context
+useCrypto.propTypes = {
+  cryptoData: PropTypes.shape({
+    totalValue: PropTypes.number.isRequired,
+    change24h: PropTypes.number.isRequired,
+    holdings: PropTypes.arrayOf(
+      PropTypes.shape({
+        symbol: PropTypes.string.isRequired,
+        value: PropTypes.number.isRequired,
+      })
+    ),
+    dominantCoin: PropTypes.shape({
+      symbol: PropTypes.string.isRequired,
+      value: PropTypes.number.isRequired,
+    }),
+    lastUpdated: PropTypes.string,
+    marketTrend: PropTypes.oneOf(["bull", "bear", null]),
+  }).isRequired,
+};
 
 export { CryptoCard };

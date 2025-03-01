@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import PropTypes from "prop-types";
 
 function TransactionsCard({ transactions = [] }) {
   // Add state for grouped transactions
@@ -151,5 +152,25 @@ function TransactionsCard({ transactions = [] }) {
     </div>
   );
 }
+
+// Define PropTypes for the component
+TransactionsCard.propTypes = {
+  transactions: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+      description: PropTypes.string.isRequired,
+      amount: PropTypes.number.isRequired,
+      date: PropTypes.string.isRequired,
+      type: PropTypes.oneOf(["income", "expense", "transfer", "investment"])
+        .isRequired,
+      category: PropTypes.string.isRequired,
+    })
+  ),
+};
+
+// Define defaultProps
+TransactionsCard.defaultProps = {
+  transactions: [],
+};
 
 export { TransactionsCard };
