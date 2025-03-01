@@ -1,7 +1,41 @@
 import React, { useState } from "react";
 import ErrorBoundary from "../components/ErrorBoundary";
-import { BuggyCounter, DataDisplay } from "../components/BuggyComponent";
 import { DashboardCard } from "../components/DashboardCard";
+
+// Simple safe component
+const SafeComponent = () => {
+  return (
+    <div className="p-4 bg-green-50 rounded-lg">
+      <h3 className="font-medium text-green-800">Working Component</h3>
+      <p className="text-green-700">This component is working properly.</p>
+    </div>
+  );
+};
+
+// Simple component that will throw an error when a button is clicked
+const PotentiallyBuggyComponent = ({ label }) => {
+  const [shouldError, setShouldError] = useState(false);
+
+  if (shouldError) {
+    // This will cause the component to crash when the button is clicked
+    throw new Error("This is a simulated error!");
+  }
+
+  return (
+    <div className="p-4 bg-blue-50 rounded-lg">
+      <h3 className="font-medium text-blue-800">{label}</h3>
+      <p className="text-blue-700 mb-3">
+        This component works until you trigger an error.
+      </p>
+      <button
+        onClick={() => setShouldError(true)}
+        className="px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors"
+      >
+        Trigger Error
+      </button>
+    </div>
+  );
+};
 
 const ErrorBoundaryDemo = () => {
   const [key, setKey] = useState(0);
@@ -11,18 +45,18 @@ const ErrorBoundaryDemo = () => {
     setKey((prevKey) => prevKey + 1);
   };
 
-  // Custom fallback UI for the counter
-  const counterFallback = (error) => (
+  // Custom fallback UI
+  const customFallback = (error) => (
     <div className="p-4 border rounded-lg bg-yellow-50 border-yellow-200">
-      <h3 className="font-medium text-yellow-800 mb-2">Counter Error</h3>
+      <h3 className="font-medium text-yellow-800 mb-2">Component Error</h3>
       <p className="text-yellow-700 mb-4">
-        Oops! The counter component crashed.
+        Oops! The component crashed with error: {error.message}
       </p>
       <button
         onClick={resetErrorBoundary}
         className="px-3 py-1 bg-yellow-500 text-white rounded hover:bg-yellow-600 transition-colors"
       >
-        Reset Counter
+        Reset Component
       </button>
     </div>
   );
@@ -56,7 +90,7 @@ const ErrorBoundaryDemo = () => {
               resetError={resetErrorBoundary}
               showDetails={true}
             >
-              <BuggyCounter label="Buggy Counter 1" />
+              <PotentiallyBuggyComponent label="Component with Default Error UI" />
             </ErrorBoundary>
           </div>
         </DashboardCard>
@@ -67,20 +101,17 @@ const ErrorBoundaryDemo = () => {
           subtitle="With custom error handling"
         >
           <div className="mt-4">
-            <ErrorBoundary key={key + 1} fallback={counterFallback}>
-              <BuggyCounter label="Buggy Counter 2" />
+            <ErrorBoundary key={key + 1} fallback={customFallback}>
+              <PotentiallyBuggyComponent label="Component with Custom Error UI" />
             </ErrorBoundary>
           </div>
         </DashboardCard>
 
-        {/* Example 3: Error boundary with null data */}
-        <DashboardCard
-          title="Handling Missing Data"
-          subtitle="Prevents app crashes from null data"
-        >
+        {/* Example 3: Safe component */}
+        <DashboardCard title="Safe Component" subtitle="Never throws errors">
           <div className="mt-4">
             <ErrorBoundary key={key + 2}>
-              <DataDisplay data={null} />
+              <SafeComponent />
             </ErrorBoundary>
           </div>
         </DashboardCard>
@@ -92,11 +123,11 @@ const ErrorBoundaryDemo = () => {
         >
           <div className="mt-4 space-y-4">
             <ErrorBoundary key={key + 3}>
-              <BuggyCounter label="Independent Counter 1" />
+              <PotentiallyBuggyComponent label="Independent Component 1" />
             </ErrorBoundary>
 
             <ErrorBoundary key={key + 4}>
-              <BuggyCounter label="Independent Counter 2" />
+              <PotentiallyBuggyComponent label="Independent Component 2" />
             </ErrorBoundary>
           </div>
         </DashboardCard>
