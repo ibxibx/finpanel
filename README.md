@@ -39,23 +39,33 @@ This project is being developed as part of the #80DaysOfCode challenge, implemen
 - ✅ Conditional Rendering
 - ✅ Lists and Keys
 - ✅ Forms and Validation
+- ✅ Lifting State Up
 - ✅ Component Lifecycle
 - ✅ React Fragments
-- ✅ Context API Implementation
+- ✅ Styling in React
+- ✅ React Router Basics
+- ✅ Class Components
 - ✅ Event Propagation
+- ✅ Handling Forms
 - ✅ React Hooks (useState)
 - ✅ React Hooks (useEffect)
-- ✅ Local Storage Integration
-- 🔄 Advanced Component Patterns (In Progress)
+- ✅ Context API Implementation
+- ✅ Higher-Order Components (HOC)
+- ✅ Error Boundaries
+- ✅ React Portals
+- ✅ Optimizing Performance
+- ✅ PropTypes
+- ✅ Refs in React
+- 🔄 React Testing Library (In Progress)
 - 📅 Future implementations planned through Day 80
 
-### Recent Implementations (Days 15-18):
-- Implemented form validation in AddTransactionForm
-- Added event propagation handling in TransactionsCard
-- Converted class components to functional components with useState
-- Implemented useEffect for side effects management
-- Added transaction persistence using localStorage
-- Enhanced session timing functionality
+### Recent Implementations (Days 21-26):
+- Created Higher-Order Components for data refreshing functionality
+- Implemented Error Boundaries for graceful error handling
+- Added React Portals for rendering elements outside component hierarchy
+- Optimized performance using PureComponent and memo
+- Added PropTypes validation to all components
+- Implemented refs to interact with the DOM and control elements directly
 
 ## 🔧 Getting Started
 
