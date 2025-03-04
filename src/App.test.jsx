@@ -2,11 +2,13 @@ import React from "react";
 import { render, screen } from "@testing-library/react";
 import "@testing-library/jest-dom";
 
-// Mock components manually
-const MockBrowserRouter = ({ children }) => <div>{children}</div>;
-const MockRoutes = ({ children }) => <div>{children}</div>;
-const MockRoute = ({ element }) => element;
-const MockLink = ({ children, to }) => <a href={to}>{children}</a>;
+// Mock react-router-dom
+jest.mock("react-router-dom", () => ({
+  BrowserRouter: ({ children }) => <div>{children}</div>,
+  Routes: ({ children }) => <div>{children}</div>,
+  Route: ({ element }) => element,
+  Link: ({ children, to }) => <a href={to}>{children}</a>,
+}));
 
 // Mock the components that App renders to simplify testing
 jest.mock(
@@ -90,44 +92,8 @@ jest.mock("./components/ErrorBoundary", () => {
   };
 });
 
-// Mock the actual App module to avoid the direct dependency on react-router-dom
-jest.mock(
-  "./App",
-  () => {
-    // Return a mock App that doesn't use react-router-dom
-    return function MockApp() {
-      return (
-        <div>
-          <header className="bg-[#1d1d1f] p-6 text-white">
-            <div className="flex justify-between items-center max-w-7xl mx-auto">
-              <div>
-                <h1 className="text-3xl font-medium tracking-tight">
-                  FinPanel Dashboard
-                </h1>
-                <p className="text-sm text-gray-300 mt-1">
-                  Your Personal Finance Tracker
-                </p>
-                <div data-testid="session-timer">Session Time: 00:00</div>
-              </div>
-
-              <nav className="flex gap-4">
-                <a href="/">Dashboard</a>
-                <a href="/transactions">Transactions</a>
-                <a href="/performance-demo">Performance</a>
-                <a href="/settings">Settings</a>
-              </nav>
-            </div>
-          </header>
-          <div data-testid="dashboard-page">Dashboard Page</div>
-        </div>
-      );
-    };
-  },
-  { virtual: false }
-);
-
-// Import the mocked App
-const App = require("./App").default;
+// Now import App after all mocks are set up
+import App from "./App";
 
 describe("App Component", () => {
   test("renders the header and navigation", () => {
