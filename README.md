@@ -28,7 +28,8 @@ FinPanel is a dynamic financial dashboard that helps users track their income, e
 
 ## 🚀 Development Progress
 
-This project is being developed as part of the #80DaysOfCode challenge, implementing new features and best practices daily. Current progress:
+This project is being developed as part of the #80DaysOfCode challenge, implementing new features and best practices on weekly basis. 
+Topics and themes implemented:
 
 - ✅ Basic React App Setup
 - ✅ JSX Implementation
@@ -56,8 +57,6 @@ This project is being developed as part of the #80DaysOfCode challenge, implemen
 - ✅ Optimizing Performance
 - ✅ PropTypes
 - ✅ Refs in React
-- 🔄 React Testing Library (In Progress)
-- 📅 Future implementations planned through Day 80
 
 ### Recent Implementations (Days 21-26):
 - Created Higher-Order Components for data refreshing functionality
