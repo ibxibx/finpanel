@@ -66,6 +66,25 @@ Topics and themes implemented:
 - Added PropTypes validation to all components
 - Implemented refs to interact with the DOM and control elements directly
 
+## 📅 Practical Plan for Upcoming Weeks
+
+To ensure consistent progress and maximize learning outcomes, the following strategy will be implemented:
+
+### Development Approach
+- Building mini-projects for each subsequent task to strengthen hands-on experience and confidence in React.js
+- Completing 2–3 tasks per week to allow buffer time for learning and troubleshooting
+- Focusing on functionality first, followed by design refinements
+
+### Technology Integration
+- Leveraging additional libraries like Material-UI, React Query, or Chart.js to streamline development
+- Implementing advanced features progressively alongside mini-project execution
+- Refining FinPanel's UI/UX based on insights gained from each completed task
+
+### Timeline Management
+- Allocating specific days for learning new concepts vs. implementation
+- Setting clear milestones aligned with the #80DaysOfCode challenge timeline
+- Regular code reviews and refactoring sessions to maintain quality
+
 ## 🔧 Getting Started
 
 1. Clone the repository:
