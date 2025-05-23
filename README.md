@@ -67,7 +67,7 @@ Topics and themes implemented:
 - Added PropTypes validation to all components
 - Implemented refs to interact with the DOM and control elements directly
 
-## 📅 Practical Plan for Upcoming Weeks
+## 📅 Practical Plan for further development
 
 To ensure consistent progress and maximize learning outcomes, the following strategy will be implemented:
 
@@ -83,8 +83,6 @@ To ensure consistent progress and maximize learning outcomes, the following stra
 
 ### Timeline Management
 - Allocating specific days for learning new concepts vs. implementation
-- Setting clear milestones aligned with the #80DaysOfCode challenge timeline
-- Regular code reviews and refactoring sessions to maintain quality
 
 ## 🔧 Getting Started
 
@@ -111,7 +109,6 @@ npm start
 - Build a comprehensive financial management tool
 - Implement best practices in React development
 - Create a portfolio-worthy project for fintech industry
-- Complete 80 days of structured learning tasks
 - Develop real-world applicable features
 
 ## 📚 Learning Journey
