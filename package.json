@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "jsonpath-plus": "^10.4.0",
     "prop-types": "^15.8.1",
     "qs": "^6.14.1",
     "react": "^18.2.0",
@@ -23,7 +24,8 @@
   "overrides": {
     "nth-check": "^2.1.1",
     "postcss": "^8.4.31",
-    "webpack-dev-server": "^4.15.2"
+    "webpack-dev-server": "^4.15.2",
+    "jsonpath": "^1.2.1"
   },
   "scripts": {
     "start": "set NODE_OPTIONS=--openssl-legacy-provider && react-scripts start",
